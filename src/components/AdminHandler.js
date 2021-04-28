@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import RoomDetails from './RoomDetails';
+import RoomDetails from "./RoomDetails";
+import AddRoom from "./AddRoom";
 import AddReservation from "./AddReservation";
 import ReservationsCalendar from "./ReservationsCalendar";
 import Grid from "@material-ui/core/Grid";
@@ -46,6 +47,21 @@ function ReservationList() {
       })
       .catch((err) => console.error(err));
   };
+  const addRoom = (newRoom) => {
+    fetch("https://hoco-api.herokuapp.com/api/rooms/", {
+      method: "POST",
+      body: JSON.stringify(newRoom),
+      headers: { "Content-type": "application/json" },
+    })
+      .then((response) => {
+        if (response.ok) {
+          fetchRooms();
+        } else {
+          alert("error");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
 
   const deleteReservation = (url) => {
     fetch("https://hoco-api.herokuapp.com/api/reservations/" + url, {
@@ -60,8 +76,19 @@ function ReservationList() {
       })
       .catch((err) => console.error(err));
   };
-
-
+  const deleteRoom = (id) => {
+    fetch("https://hoco-api.herokuapp.com/api/rooms/" + id, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          fetchRooms();
+        } else {
+          alert("error");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
     fetchReservations();
@@ -74,16 +101,17 @@ function ReservationList() {
       headerName: "",
       width: 100,
       cellRendererFramework: (params) => (
-        <div>                    <Tooltip title="Delete reservation" placement="top">
-
-          <IconButton
-            onClick={() => deleteReservation(params.value)}
-            aria-label="delete"
-            color="secondary"
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButton>
+        <div>
+          {" "}
+          <Tooltip title="Delete reservation" placement="top">
+            <IconButton
+              onClick={() => deleteReservation(params.value)}
+              aria-label="delete"
+              color="secondary"
+              size="small"
+            >
+              <DeleteIcon />
+            </IconButton>
           </Tooltip>
         </div>
       ),
@@ -138,22 +166,44 @@ function ReservationList() {
 
   return (
     <div>
-      <Grid container spacing={2}>
+      <Grid
+        style={{
+          alignItems: "center",
+          alignContent: "center",
+          textAlign: "center",
+          marginTop: 30,
+        }}
+        container
+        spacing={2}
+      >
         <Grid
           item
-          xs={2}
-          style={{ alignItems: "center", textAlign: "center", marginTop: 30 }}
+          lg={2}
+          xs={12}
+          style={{
+            alignItems: "center",
+            alignContent: "center",
+            textAlign: "center",
+            marginTop: 30,
+          }}
         >
           <div>
             <Typography variant="h5">Room management</Typography>
+            <AddRoom addRoom={addRoom} />
           </div>
         </Grid>
         <Grid
           item
-          xs={10}
-          style={{ alignItems: "center", textAlign: "center", marginTop: 30 }}
+          xs={12}
+          lg={10}
+          style={{
+            alignItems: "center",
+            alignContent: "center",
+            textAlign: "center",
+            marginTop: 30,
+          }}
         >
-          <Grid container>
+          <Grid spacing="3" container>
             {rooms.map((room) => (
               <Grid item xs={12} md={6} lg={3}>
                 <Card style={{ width: 345 }}>
@@ -173,11 +223,21 @@ function ReservationList() {
                   </CardActionArea>
                   <CardActions>
                     <Tooltip title="Room is open between:" placement="top">
-                      <Button size="small" color="primary">
+                      <Button size="small" variant="outlined" color="primary">
                         {room.openTime} - {room.closeTime}
                       </Button>
                     </Tooltip>
                     <RoomDetails Room={room} />
+                    <Button
+                      id={room.roomId}
+                      name={room.roomId}
+                      onClick={() => deleteRoom(room.roomId)}
+                      size="small"
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Delete
+                    </Button>
                   </CardActions>
                 </Card>
               </Grid>

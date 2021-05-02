@@ -32,16 +32,14 @@ function AddReservation(props) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-
-
   const [open, setOpen] = React.useState(false);
   const [reservation, setReservation] = React.useState({
     room: "1",
     apartment: "",
     bookedBy: "",
     bookingDate: moment().format(),
-    startTime: moment().add(1, "h").startOf('hour').format(),
-    endTime: moment().add(2, "h").startOf('hour').format(),
+    startTime: moment().add(1, "h").startOf("hour").format(),
+    endTime: moment().add(2, "h").startOf("hour").format(),
     invoiced: false,
   });
   const inputChanged = (event) => {
@@ -59,8 +57,8 @@ function AddReservation(props) {
       apartment: "",
       bookedBy: "",
       bookingDate: moment().format(),
-      startTime: moment().add(1, "h").startOf('hour').format(),
-      endTime: moment().add(2, "h").startOf('hour').format(),
+      startTime: moment().add(1, "h").startOf("hour").format(),
+      endTime: moment().add(2, "h").startOf("hour").format(),
       invoiced: false,
     });
   };
@@ -123,7 +121,6 @@ function AddReservation(props) {
               <StepLabel>Contact details</StepLabel>
               <StepContent>
                 <div>
- 
                   <TextField
                     id="apartment"
                     onChange={inputChanged}
@@ -147,7 +144,6 @@ function AddReservation(props) {
               <StepLabel>Choose your room</StepLabel>
               <StepContent>
                 <div>
-
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -173,7 +169,10 @@ function AddReservation(props) {
                     name="startTime"
                     margin="dense"
                     type="datetime-local"
-                    defaultValue={moment().add(1, "h").startOf('hour').format("yyyy-MM-DTHH:mm")}
+                    defaultValue={moment()
+                      .add(1, "h")
+                      .startOf("hour")
+                      .format("yyyy-MM-DTHH:mm")}
                     onChange={inputChanged}
                     InputLabelProps={{
                       shrink: true,
@@ -194,7 +193,7 @@ function AddReservation(props) {
                     type="datetime-local"
                     defaultValue={moment()
                       .add(2, "h")
-                      .startOf('hour')
+                      .startOf("hour")
                       .format("yyyy-MM-DTHH:mm")}
                     onChange={inputChanged}
                     InputLabelProps={{
